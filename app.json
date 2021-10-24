@@ -27,6 +27,15 @@
     },
     "web": {
       "favicon": "./assets/favicon.png"
-    }
+    },
+    "plugins": [
+      [
+        "expo-image-picker",
+        {
+          "photosPermission": "The app requires access to your photos to send them on chats.",
+          "cameraPermission": "The app requires access to your camera to allow video calling, and taking pictures."
+        }
+      ]
+    ]
   }
 }

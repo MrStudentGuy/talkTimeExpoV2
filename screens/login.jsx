@@ -4,6 +4,7 @@ import { useEffect, useState } from 'react';
 import { KeyboardAvoidingView, StyleSheet, Text, View, TouchableOpacity } from 'react-native';
 import { TextInput } from "react-native-gesture-handler";
 import { auth } from '../firebase';
+import { fstore } from '../firebase';
 
 const Login = () => {
     const [email, setEmail] = useState('')
@@ -14,7 +15,7 @@ const Login = () => {
     useEffect(() => {
         const unsubscribe = auth.onAuthStateChanged(user => {
             if (user) {
-                navigation.replace("Home")
+                navigation.replace("uEdit") 
             }
         })
 
@@ -26,6 +27,17 @@ const Login = () => {
             .createUserWithEmailAndPassword(email, password)
             .then(userCredentials => {
                 const user = userCredentials;
+            })
+            .then(() => {
+                fstore.collection('user').doc(auth.currentUser.uid)
+                .set({
+                    uName: "",
+                    city: "",
+                    country: "", 
+                    email: email,
+                    createdAt: fstore.Timestamp.fromDate(new Date()),
+                    userImg: 'https://cdn.pixabay.com/photo/2016/08/08/09/17/avatar-1577909_960_720.png'
+                })
             })
             .catch(error => alert(error.message))
     }
@@ -39,8 +51,6 @@ const Login = () => {
             .catch(error => alert(error.message))
     }
 
-
-    
     return(
         <KeyboardAvoidingView style={styles.container} behavior="padding">
             <View style={styles.inputCont}>
